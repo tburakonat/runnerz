@@ -16,18 +16,18 @@ public class RunRepository {
         this.jdbcClient = jdbcClient;
     }
 
-    List<Run> findAll() {
+    public List<Run> findAll() {
         return jdbcClient.sql("SELECT * FROM Run").query(Run.class).list();
     }
 
-    Optional<Run> findById(Integer id) {
+    public Optional<Run> findById(Integer id) {
         return jdbcClient.sql("SELECT * FROM Run WHERE id = :id")
                 .param("id", id)
                 .query(Run.class)
                 .optional();
     }
 
-    void createRun(Run run) {
+    public void createRun(Run run) {
         var updated = jdbcClient.sql("INSERT INTO Run(id,title,started_on,completed_on,miles,location) values(?,?,?,?,?,?)")
                 .params(List.of(run.id(),run.title(),run.startedOn(),run.completedOn(),run.miles(),run.location().toString()))
                 .update();
@@ -35,7 +35,7 @@ public class RunRepository {
         Assert.state(updated == 1, "Failed to create run " + run.title());
     }
 
-    void updateRun(Run run, Integer id) {
+    public void updateRun(Run run, Integer id) {
         var updated = jdbcClient.sql("update run set title = ?, started_on = ?, completed_on = ?, miles = ?, location = ? where id = ?")
                 .params(List.of(run.title(),run.startedOn(),run.completedOn(),run.miles(),run.location().toString(), id))
                 .update();
@@ -43,7 +43,7 @@ public class RunRepository {
         Assert.state(updated == 1, "Failed to update run " + run.title());
     }
 
-    void deleteRun(Integer id) {
+    public void deleteRun(Integer id) {
         var updated = jdbcClient.sql("delete from run where id = :id")
                 .param("id", id)
                 .update();
