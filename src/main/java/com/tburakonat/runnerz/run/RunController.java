@@ -3,7 +3,6 @@ package com.tburakonat.runnerz.run;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,10 @@ public class RunController {
     }
 
     @GetMapping("")
-    List<Run> getAllRuns() {
+    List<Run> getAllRuns(@RequestParam(required = false) Location location) {
+        if (location != null) {
+            return runRepository.findByLocation(location);
+        }
         return runRepository.findAll();
     }
 
@@ -36,7 +38,7 @@ public class RunController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     void createRun(@Valid @RequestBody Run run) {
-        runRepository.createRun(run);
+        runRepository.save(run);
     }
 
     @PostMapping("/batch")
@@ -48,12 +50,12 @@ public class RunController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateRun(@Valid @RequestBody Run run, @PathVariable Integer id) {
-        runRepository.updateRun(run, id);
+        runRepository.save(run);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteRun(@PathVariable Integer id) {
-        runRepository.deleteRun(id);
+        runRepository.deleteById(id);
     }
 }
