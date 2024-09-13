@@ -39,6 +39,12 @@ public class RunController {
         runRepository.createRun(run);
     }
 
+    @PostMapping("/batch")
+    @ResponseStatus(HttpStatus.CREATED)
+    void createMultipleRuns(@Valid @RequestBody List<Run> runs) {
+        runRepository.saveAll(runs);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateRun(@Valid @RequestBody Run run, @PathVariable Integer id) {
