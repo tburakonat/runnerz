@@ -23,7 +23,6 @@ public class RunJsonDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Running RunJsonDataLoader");
         if (runRepository.count() == 0) {
             try (InputStream inputStream = TypeReference.class.getResourceAsStream("/data/runs.json")) {
                 Runs allRuns = objectMapper.readValue(inputStream, Runs.class);
